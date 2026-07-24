@@ -1,0 +1,6 @@
+{
+  "name": "SaaS Analytics & Admin Dashboard",
+  "description": "A high-end, responsive dark-mode administrative dashboard featuring real-time SaaS performance metrics, interactive telemetry, user management, and AI-powered system insights.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
