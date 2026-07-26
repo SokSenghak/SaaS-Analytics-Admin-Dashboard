@@ -1,9 +1,9 @@
 @import "tailwindcss";
 
 @theme {
-  --color-obsidian: #0E091E;
-  --color-obsidian-light: #16112C;
-  --color-obsidian-card: rgba(22, 17, 40, 0.7);
+  --color-obsidian: #080511;
+  --color-obsidian-light: #110B22;
+  --color-obsidian-card: rgba(15, 10, 26, 0.85);
   --color-electric-purple: #9D4EDD;
   --color-electric-purple-light: rgba(157, 78, 221, 0.15);
   --color-neon-cyan: #00F5D4;
@@ -24,7 +24,7 @@
 }
 
 ::-webkit-scrollbar-track {
-  background: #0E091E;
+  background: #080511;
 }
 
 ::-webkit-scrollbar-thumb {
@@ -97,9 +97,9 @@
 
 /* Background Gradients */
 .radial-glow {
-  background: radial-gradient(circle at 30% 20%, rgba(157, 78, 221, 0.22) 0%, rgba(255, 0, 127, 0.12) 35%, rgba(14, 10, 30, 0) 70%);
+  background: radial-gradient(circle at 50% 50%, rgba(157, 78, 221, 0.06) 0%, rgba(8, 5, 17, 0) 70%);
 }
 
 .radial-glow-top {
-  background: radial-gradient(circle at 50% 0%, rgba(255, 0, 127, 0.15) 0%, rgba(14, 10, 30, 0) 65%);
+  background: radial-gradient(circle at 50% 0%, rgba(157, 78, 221, 0.08) 0%, rgba(8, 5, 17, 0) 60%);
 }
