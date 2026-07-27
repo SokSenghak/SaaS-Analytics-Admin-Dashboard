@@ -61,9 +61,9 @@ export default function Header({
   };
 
   return (
-    <header id="dashboard-header" className="px-8 py-4 border-b border-white/5 select-none bg-obsidian-light/20 backdrop-blur-sm">
+    <header id="dashboard-header" className="px-8 py-4 border-b border-white/5 select-none bg-obsidian-light/20 backdrop-blur-sm relative z-[70] overflow-visible">
       {/* Top Header Row */}
-      <div id="top-header-row" className="flex items-center justify-between gap-4">
+      <div id="top-header-row" className="flex items-center justify-between gap-4 relative z-[70]">
         {/* Search Input Bar */}
         <div 
           id="search-trigger"
@@ -137,7 +137,7 @@ export default function Header({
           </div>
 
           {/* Notification Bell */}
-          <div className="relative">
+          <div className="relative z-[70]">
             <button 
               id="notification-bell-btn"
               onClick={() => setShowNotifications(!showNotifications)}
@@ -151,7 +151,7 @@ export default function Header({
 
             {/* Notification Popover */}
             {showNotifications && (
-              <div id="notification-popover" className="absolute right-0 mt-3 w-80 bg-obsidian-light/95 border border-white/10 rounded-2xl shadow-2xl overflow-hidden z-50 backdrop-blur-md">
+              <div id="notification-popover" className="absolute right-0 mt-3 w-80 bg-obsidian-light/95 border border-white/10 rounded-2xl shadow-2xl overflow-hidden z-[90] backdrop-blur-md">
                 <div className="p-4 border-b border-white/5 flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <ShieldAlert className="w-4 h-4 text-electric-purple" />
@@ -200,7 +200,7 @@ export default function Header({
           </div>
 
           {/* User Profile Pill */}
-          <div className="relative">
+          <div className="relative z-[70]">
             <button 
               id="profile-trigger-btn"
               onClick={() => setShowProfileMenu(!showProfileMenu)}
@@ -219,7 +219,7 @@ export default function Header({
 
             {/* Profile Dropdown */}
             {showProfileMenu && (
-              <div id="profile-dropdown-menu" className="absolute right-0 mt-3 w-52 bg-obsidian-light/95 border border-white/10 rounded-2xl shadow-2xl py-1.5 z-50 backdrop-blur-md">
+              <div id="profile-dropdown-menu" className="absolute right-0 mt-3 w-52 bg-obsidian-light/95 border border-white/10 rounded-2xl shadow-2xl py-1.5 z-[90] backdrop-blur-md">
                 <div className="px-4 py-2 border-b border-white/5 mb-1.5">
                   <p className="text-xs text-zinc-500">Access Key</p>
                   <p className="text-xs font-mono text-zinc-300 truncate">sk_aetheris_...fc98</p>

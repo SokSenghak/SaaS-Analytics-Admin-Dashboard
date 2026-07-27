@@ -409,7 +409,11 @@ export default function App() {
   };
 
   return (
-    <div id="saas-dashboard-root" className="h-screen bg-obsidian flex text-zinc-300 font-sans relative overflow-hidden radial-glow-top">
+    <div
+      id="saas-dashboard-root"
+      className="h-screen bg-obsidian flex text-zinc-300 font-sans relative overflow-hidden radial-glow-top"
+      style={{ background: 'linear-gradient(180deg, rgba(10,7,19,1) 0%, rgba(15,10,26,0.98) 40%, rgba(12,9,18,1) 100%)' }}
+    >
       {/* Background Decorative Mesh Glow */}
       <div className="absolute inset-0 radial-glow pointer-events-none z-0" />
 
@@ -431,7 +435,9 @@ export default function App() {
       />
 
       {/* Main Content Workspace Panel */}
-      <main id="main-content-panel" className="flex-1 min-w-0 flex flex-col h-screen z-10 relative overflow-hidden">
+      <main id="main-content-panel" className="flex-1 min-w-0 flex flex-col h-screen z-10 relative overflow-visible"
+        style={{ background: 'transparent' }}
+      >
         {/* Consistent Top & Greetings Header */}
         <Header 
           onSearchClick={() => setIsCommandPaletteOpen(true)}

@@ -124,6 +124,21 @@ export default function Views({
   const [selectedMsgId, setSelectedMsgId] = useState('msg-1');
   const [replyText, setReplyText] = useState('');
 
+  // -- Telemetry chart interactive state --
+  const [chartHoverIdx, setChartHoverIdx] = useState<number | null>(null);
+  const [chartHoverPos, setChartHoverPos] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
+  const chartData = [120, 80, 140, 70, 160, 110, 130];
+  const chartWidth = 1000;
+  const chartHeight = 200;
+  const chartMax = Math.max(...chartData);
+  const chartPoints = chartData.map((v, i) => {
+    const x = (i / (chartData.length - 1)) * chartWidth;
+    const y = chartHeight - ((v / chartMax) * (chartHeight - 40)) - 20; // padding
+    return { x, y, value: v };
+  });
+  const areaPath = `M ${chartPoints[0].x} ${chartHeight} L ${chartPoints.map(p => `${p.x} ${p.y}`).join(' L ')} L ${chartWidth} ${chartHeight} Z`;
+  const linePath = chartPoints.map((p, i) => (i === 0 ? `M ${p.x} ${p.y}` : `L ${p.x} ${p.y}`)).join(' ');
+
   // Copy helper
   const handleCopy = (id: string, token: string) => {
     navigator.clipboard.writeText(token);
@@ -194,39 +209,58 @@ export default function Views({
           </div>
           
           <div className="flex-1 relative flex items-end">
-            <svg viewBox="0 0 1000 200" className="w-full h-full overflow-visible">
-              <defs>
-                <linearGradient id="analytics-area" x1="0%" y1="0%" x2="0%" y2="100%">
-                  <stop offset="0%" stopColor="#00F5D4" stopOpacity="0.18" />
-                  <stop offset="100%" stopColor="#00F5D4" stopOpacity="0" />
-                </linearGradient>
-              </defs>
-              <grid className="stroke-zinc-800/20" strokeWidth="1" strokeDasharray="3 3">
-                <line x1="0" y1="50" x2="1000" y2="50" />
-                <line x1="0" y1="100" x2="1000" y2="100" />
-                <line x1="0" y1="150" x2="1000" y2="150" />
-              </grid>
-              {/* Dynamic glowing performance waves */}
-              <path 
-                d="M 0 160 Q 150 60 300 130 T 600 80 T 900 110 T 1000 70 L 1000 200 L 0 200 Z" 
-                fill="url(#analytics-area)" 
-              />
-              <path 
-                d="M 0 160 Q 150 60 300 130 T 600 80 T 900 110 T 1000 70" 
-                fill="none" 
-                stroke="#00F5D4" 
-                strokeWidth="3" 
-                strokeLinecap="round"
-              />
-              <path 
-                d="M 0 130 Q 150 90 300 150 T 600 110 T 900 130 T 1000 90" 
-                fill="none" 
-                stroke="#9D4EDD" 
-                strokeWidth="1.5" 
-                strokeDasharray="4 4" 
-                opacity="0.6"
-              />
-            </svg>
+            <div className="relative w-full h-full">
+              <svg viewBox={`0 0 ${chartWidth} ${chartHeight}`} preserveAspectRatio="none" className="w-full h-full overflow-visible">
+                <defs>
+                  <linearGradient id="analytics-area" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" stopColor="#00F5D4" stopOpacity="0.18" />
+                    <stop offset="100%" stopColor="#00F5D4" stopOpacity="0" />
+                  </linearGradient>
+                </defs>
+
+                {/* Background grid lines */}
+                <line x1="0" y1="50" x2={chartWidth} y2="50" stroke="#0f0b13" strokeOpacity="0.12" strokeWidth="1" strokeDasharray="3 3" />
+                <line x1="0" y1="100" x2={chartWidth} y2="100" stroke="#0f0b13" strokeOpacity="0.12" strokeWidth="1" strokeDasharray="3 3" />
+                <line x1="0" y1="150" x2={chartWidth} y2="150" stroke="#0f0b13" strokeOpacity="0.12" strokeWidth="1" strokeDasharray="3 3" />
+
+                {/* Area + lines */}
+                <path d={areaPath} fill="url(#analytics-area)" />
+                <path d={linePath} fill="none" stroke="#00F5D4" strokeWidth="3" strokeLinecap="round" />
+                <path d={chartPoints.map((p, i) => (i === 0 ? `M ${p.x} ${p.y}` : `L ${p.x} ${p.y}`)).join(' ')} fill="none" stroke="#9D4EDD" strokeWidth="1.5" strokeDasharray="4 4" opacity="0.6" />
+
+                {/* Interactive hit areas / data points */}
+                {chartPoints.map((p, i) => (
+                  <g key={i}>
+                    <circle cx={p.x} cy={p.y} r={4} fill={i === chartHoverIdx ? '#00F5D4' : '#00F5D4'} />
+                    <circle
+                      cx={p.x}
+                      cy={p.y}
+                      r={12}
+                      fill="transparent"
+                      style={{ cursor: 'pointer' }}
+                      onMouseEnter={() => setChartHoverIdx(i)}
+                      onMouseLeave={() => setChartHoverIdx(null)}
+                    />
+                  </g>
+                ))}
+              </svg>
+
+              {/* Tooltip (positioned with percentage within the container) */}
+              {chartHoverIdx !== null && chartPoints[chartHoverIdx] && (
+                <div
+                  className="absolute z-[100] bg-zinc-900/95 text-white text-xs px-2 py-1 rounded shadow-lg pointer-events-none"
+                  style={{
+                    left: `${(chartPoints[chartHoverIdx].x / chartWidth) * 100}%`,
+                    top: `${(chartPoints[chartHoverIdx].y / chartHeight) * 100}%`,
+                    transform: 'translate(-50%, -120%)',
+                    whiteSpace: 'nowrap'
+                  }}
+                >
+                  <div className="font-semibold">{`${chartPoints[chartHoverIdx].value} ms`}</div>
+                  <div className="text-[11px] text-zinc-400">Cluster Egress</div>
+                </div>
+              )}
+            </div>
           </div>
         </div>
 
